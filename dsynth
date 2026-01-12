@@ -1,0 +1,55 @@
+#!/bin/tcsh -f
+
+# ============================================================
+#                   DSYNTH
+# ------------------------------------------------------------
+#  Author : Divija Kavishvar
+#  Description:
+#     Open-source automation tool for synthesis using TCL scripting.
+#     It takes RTL + SDC as input and generates synthesized netlist
+#     and pre-layout timing report using Yosys & OpenTimer.
+# ============================================================
+
+
+echo "       ***********************************************"
+echo "       *                                             *"
+echo "       *                    DSYNTH                   *"
+echo "       *                                             *"
+echo "       ***********************************************\n"
+echo "This is an open-source automation tool created by Divija Kavishvar"
+
+echo "A unique User Interface (UI) that takes RTL netlist and SDC constraints as inputs,"
+echo "and generates a synthesized netlist and pre-layout timing report as an output."
+echo "It uses Yosys (open-source synthesis tool) and OpenTimer for timing analysis.\n"
+
+# ------------------------------------------------------------
+#               Command-Line Argument Handling
+# ------------------------------------------------------------
+
+# Check if exactly one argument (CSV file) is provided
+
+if ($#argv != 1) then
+    echo "Info: Please provide the csv file."
+    echo "USAGE: ./dsynth <csv file>"
+    exit 1
+endif
+
+if (! -f $argv[1] || $argv[1] == "-help") then
+    if ($argv[1] != "-help") then
+        echo "ERROR: Cannot find csv file $argv[1]. Exiting..."
+        exit 1
+    else
+        echo USAGE: ./dsynth \<csv file\>
+        echo The csv file should contain the following columns:
+        echo \<Design Name\> is the name of top level module
+        echo \<Output Directory\> is the name of output directory where synthesis scripts, synthesized netlist and timing reports are stored.
+        echo \<Netlist Directory\> is the name of directory where RTL netlist files are stored.
+        echo \<Early Library Path\> is the path to the early cell library to be used for STA.
+        echo \<Late Library Path\> is the path to the late cell library to be used for STA.
+        echo \<Constraints file\> is the csv file path of constraints to be used for STA.
+    endif
+else
+    tclsh dsynth.tcl $argv[1]
+endif
+
+
